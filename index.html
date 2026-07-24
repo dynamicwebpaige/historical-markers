@@ -507,11 +507,11 @@ async function init() {
   loadingText.textContent = 'Loading manifest…';
 
   try {
-    const resp = await fetch('data/manifest.json');
+    const resp = await fetch('manifest.json');
     manifest = await resp.json();
   } catch (e) {
     loadingText.textContent = 'Error loading manifest';
-    loadingSub.textContent = 'Make sure data/manifest.json exists';
+    loadingSub.textContent = 'Make sure manifest.json exists';
     return;
   }
 
