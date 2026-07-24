@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>U.S. Historical Markers Map | 206,000+ Markers</title>
+<meta name="description" content="Interactive map of over 206,000 historical markers across the United States from the Historical Marker Database (HMDB).">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/deck.gl@8.9.35/dist.min.js"></script>
+<script src="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3.6.2/dist/maplibre-gl.css" />
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-dark: #0c0c18;
+    --bg-panel: #13132a;
+    --bg-card: #1a1a3e;
+    --bg-card-hover: #222250;
+    --accent: #ff4d6d;
+    --accent-glow: rgba(255, 77, 109, 0.35);
+    --accent-soft: rgba(255, 77, 109, 0.12);
+    --accent-secondary: #7b2ff7;
+    --accent-secondary-glow: rgba(123, 47, 247, 0.3);
+    --gold: #fbbf24;
+    --teal: #2dd4bf;
+    --text-primary: #f0f0f5;
+    --text-secondary: #a8a8c0;
+    --text-muted: #5e5e7a;
+    --border: rgba(255, 255, 255, 0.06);
+    --border-accent: rgba(255, 77, 109, 0.2);
+    --glass: rgba(19, 19, 42, 0.92);
+    --glass-light: rgba(26, 26, 62, 0.88);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 30px rgba(255, 77, 109, 0.15);
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* === HEADER === */
+  .header {
+    background: linear-gradient(135deg, var(--bg-panel) 0%, #1a1040 50%, var(--bg-panel) 100%);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    z-index: 1000;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent-secondary), transparent);
+    opacity: 0.6;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .header-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: var(--shadow-glow);
+    animation: pulse-icon 3s ease-in-out infinite;
+  }
+  @keyframes pulse-icon {
+    0%, 100% { box-shadow: var(--shadow-glow); }
+    50% { box-shadow: 0 0 40px rgba(255, 77, 109, 0.3); }
+  }
+  .header h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 0%, #c0c0d8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .header-subtitle {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .stat-pill {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 0.73rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s;
+  }
+  .stat-pill .num {
+    font-weight: 700;
+    font-size: 0.82rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-pill .num.accent { color: var(--accent); }
+  .stat-pill .num.teal { color: var(--teal); }
+  .stat-pill .num.gold { color: var(--gold); }
+
+  /* === MAIN === */
+  .main-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* === SIDEBAR === */
+  .sidebar {
+    width: 360px;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    z-index: 900;
+    flex-shrink: 0;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sidebar.collapsed {
+    transform: translateX(-360px);
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+  }
+  .sidebar-toggle {
+    position: absolute;
+    left: 360px;
+    top: 14px;
+    z-index: 950;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+    padding: 10px 7px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s;
+  }
+  .sidebar.collapsed .sidebar-toggle { left: 0; }
+  .sidebar-toggle:hover {
+    color: var(--accent);
+    background: var(--bg-card);
+  }
+
+  .search-container {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .search-input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.82rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+  .search-icon {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  /* State list */
+  .state-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+  .state-list::-webkit-scrollbar { width: 4px; }
+  .state-list::-webkit-scrollbar-track { background: transparent; }
+  .state-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 10px; }
+
+  .state-item {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .state-item:hover {
+    background: var(--accent-soft);
+    border-color: var(--border-accent);
+  }
+  .state-item.active {
+    background: rgba(255, 77, 109, 0.12);
+    border-color: rgba(255, 77, 109, 0.3);
+  }
+  .state-item.loaded .state-status { color: var(--teal); }
+  .state-item-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .state-name {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .state-count {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+  }
+  .state-status {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    min-width: 55px;
+    text-align: right;
+  }
+
+  .section-label {
+    padding: 10px 16px 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+  .controls-row {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+  }
+  .ctrl-btn {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-dark);
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .ctrl-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+  .ctrl-btn.active-btn {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+  }
+
+  /* === MAP === */
+  #map-container {
+    flex: 1;
+    position: relative;
+  }
+  #deck-canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Tooltip */
+  .deck-tooltip {
+    position: absolute;
+    z-index: 999;
+    pointer-events: none;
+    background: var(--glass) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    max-width: 320px;
+    font-family: 'Inter', sans-serif;
+  }
+  .tt-title {
+    font-weight: 700;
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .tt-meta {
+    font-size: 0.7rem;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+  .tt-desc {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* Loading overlay */
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(12, 12, 24, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: opacity 0.5s;
+  }
+  .loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  .loading-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    width: 200px;
+    height: 3px;
+    background: var(--border);
+    border-radius: 4px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.3s;
+  }
+
+  /* Info panel (bottom-right) */
+  .info-panel {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    z-index: 800;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    max-width: 240px;
+    box-shadow: var(--shadow);
+  }
+  .info-panel a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .info-panel a:hover { text-decoration: underline; }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 300px; }
+    .sidebar.collapsed { transform: translateX(-300px); }
+    .sidebar-toggle { left: 300px; }
+    .sidebar.collapsed .sidebar-toggle { left: 0; }
+    .header-right { display: none; }
+    .info-panel { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="header-icon">🗺️</div>
+    <div>
+      <h1>U.S. Historical Markers</h1>
+      <div class="header-subtitle">Historical Marker Database (HMDB)</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="stat-pill"><span class="num accent" id="loaded-count">0</span> loaded</div>
+    <div class="stat-pill"><span class="num teal" id="states-count">0</span> / 51 states</div>
+    <div class="stat-pill"><span class="num gold">206,284</span> total</div>
+  </div>
+</header>
+
+<div class="main-container">
+  <aside class="sidebar" id="sidebar">
+    <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle sidebar">◀</button>
+
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search" placeholder="Search states..." autocomplete="off">
+    </div>
+
+    <div class="controls-row">
+      <button class="ctrl-btn" id="btn-load-all">Load All States</button>
+      <button class="ctrl-btn" id="btn-reset">Reset View</button>
+    </div>
+
+    <div class="section-label">States · click to load & zoom</div>
+    <div class="state-list" id="state-list"></div>
+  </aside>
+
+  <div id="map-container">
+    <div id="deck-canvas"></div>
+
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="loading-spinner"></div>
+      <div class="loading-text" id="loading-text">Loading map…</div>
+      <div class="loading-sub" id="loading-sub">Preparing 206,284 markers</div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div class="info-panel">
+      Data from <a href="https://www.hmdb.org" target="_blank" rel="noopener">HMDB.org</a><br>
+      206,284 markers · 51 states<br>
+      Click a state to load its markers.<br>
+      Click a point to view details.
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================
+// State & Data Management
+// =============================================
+let manifest = null;
+let allPoints = [];
+let loadedStates = new Set();
+let deckgl = null;
+let hoveredObject = null;
+
+const loadedCountEl = document.getElementById('loaded-count');
+const statesCountEl = document.getElementById('states-count');
+const loadingOverlay = document.getElementById('loading-overlay');
+const loadingText = document.getElementById('loading-text');
+const loadingSub = document.getElementById('loading-sub');
+const progressFill = document.getElementById('progress-fill');
+const stateListEl = document.getElementById('state-list');
+const searchEl = document.getElementById('search');
+
+// =============================================
+// Initialize
+// =============================================
+async function init() {
+  loadingText.textContent = 'Loading manifest…';
+
+  try {
+    const resp = await fetch('data/manifest.json');
+    manifest = await resp.json();
+  } catch (e) {
+    loadingText.textContent = 'Error loading manifest';
+    loadingSub.textContent = 'Make sure data/manifest.json exists';
+    return;
+  }
+
+  // Build state list
+  manifest.states.sort((a, b) => b.count - a.count);
+  buildStateList();
+
+  // Init deck.gl
+  initDeck();
+
+  // Load initial view (top 5 states for a nice first impression)
+  loadingText.textContent = 'Loading initial markers…';
+  const initialStates = manifest.states.slice(0, 5);
+  let loaded = 0;
+  for (const s of initialStates) {
+    await loadState(s.state, false);
+    loaded++;
+    progressFill.style.width = `${(loaded / initialStates.length) * 100}%`;
+    loadingSub.textContent = `Loaded ${s.state}…`;
+  }
+
+  updateDeck();
+  setTimeout(() => loadingOverlay.classList.add('hidden'), 400);
+}
+
+// =============================================
+// Deck.gl Setup
+// =============================================
+function initDeck() {
+  deckgl = new deck.DeckGL({
+    container: 'deck-canvas',
+    mapStyle: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+    initialViewState: {
+      longitude: -98.5,
+      latitude: 39.8,
+      zoom: 4,
+      pitch: 0,
+      bearing: 0
+    },
+    controller: true,
+    layers: [],
+    getTooltip: getTooltip
+  });
+}
+
+function updateDeck() {
+  if (!deckgl) return;
+
+  const layer = new deck.ScatterplotLayer({
+    id: 'markers',
+    data: allPoints,
+    getPosition: d => [d.o, d.a],
+    getFillColor: d => {
+      // Color by region for visual interest
+      if (d.a > 42) return [120, 120, 255, 200];      // Northeast - blue
+      if (d.a > 36 && d.o > -90) return [100, 220, 180, 200]; // Southeast - teal
+      if (d.o < -105) return [255, 180, 60, 200];      // West - gold
+      if (d.a < 36) return [255, 77, 109, 200];         // South - pink
+      return [180, 130, 255, 200];                       // Midwest - purple
+    },
+    getRadius: 300,
+    radiusMinPixels: 2,
+    radiusMaxPixels: 12,
+    pickable: true,
+    autoHighlight: true,
+    highlightColor: [255, 255, 255, 100],
+    transitions: {
+      getPosition: 600,
+      getFillColor: 600
+    }
+  });
+
+  deckgl.setProps({ layers: [layer] });
+
+  // Update counters
+  loadedCountEl.textContent = allPoints.length.toLocaleString();
+  statesCountEl.textContent = loadedStates.size;
+}
+
+function getTooltip({ object }) {
+  if (!object) return null;
+  return {
+    html: `<div class="tt-title">${escapeHtml(object.t)}</div>
+           <div class="tt-meta">${escapeHtml(object.w)} · ${escapeHtml(object.c)}</div>
+           <div class="tt-desc">${escapeHtml(object.d)}</div>`,
+    className: 'deck-tooltip',
+    style: { }
+  };
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// =============================================
+// Data Loading
+// =============================================
+async function loadState(stateName, animate = true) {
+  if (loadedStates.has(stateName)) return;
+
+  const stateInfo = manifest.states.find(s => s.state === stateName);
+  if (!stateInfo) return;
+
+  // Update UI
+  const el = document.querySelector(`[data-state="${stateName}"]`);
+  if (el) {
+    el.querySelector('.state-status').textContent = 'loading…';
+    el.querySelector('.state-status').style.color = 'var(--gold)';
+  }
+
+  try {
+    const resp = await fetch(stateInfo.file);
+    const data = await resp.json();
+    allPoints = allPoints.concat(data);
+    loadedStates.add(stateName);
+
+    if (el) {
+      el.classList.add('loaded');
+      el.querySelector('.state-status').textContent = '✓ loaded';
+      el.querySelector('.state-status').style.color = '';
+    }
+
+    updateDeck();
+
+    if (animate) {
+      flyToState(stateInfo);
+    }
+  } catch (e) {
+    console.error(`Failed to load ${stateName}:`, e);
+    if (el) {
+      el.querySelector('.state-status').textContent = 'error';
+      el.querySelector('.state-status').style.color = 'var(--accent)';
+    }
+  }
+}
+
+function flyToState(stateInfo) {
+  if (!deckgl) return;
+  const b = stateInfo.bounds;
+  const lat = (b.minLat + b.maxLat) / 2;
+  const lng = (b.minLng + b.maxLng) / 2;
+  const latSpan = b.maxLat - b.minLat;
+  const lngSpan = b.maxLng - b.minLng;
+  const span = Math.max(latSpan, lngSpan);
+  let zoom = 6;
+  if (span > 10) zoom = 4;
+  else if (span > 5) zoom = 5;
+  else if (span > 2) zoom = 6;
+  else if (span > 1) zoom = 7;
+  else zoom = 8;
+
+  deckgl.setProps({
+    initialViewState: {
+      longitude: lng,
+      latitude: lat,
+      zoom: zoom,
+      pitch: 0,
+      bearing: 0,
+      transitionDuration: 1200,
+      transitionInterpolator: new deck.FlyToInterpolator()
+    }
+  });
+}
+
+// =============================================
+// UI
+// =============================================
+function buildStateList() {
+  manifest.states.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'state-item';
+    item.dataset.state = s.state;
+    item.innerHTML = `
+      <div class="state-item-left">
+        <div class="state-name">${escapeHtml(s.state)}</div>
+        <div class="state-count">${s.count.toLocaleString()} markers · ${(s.size / 1024).toFixed(0)} KB</div>
+      </div>
+      <div class="state-status">—</div>
+    `;
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.state-item.active').forEach(el => el.classList.remove('active'));
+      item.classList.add('active');
+      if (loadedStates.has(s.state)) {
+        flyToState(s);
+      } else {
+        loadState(s.state);
+      }
+    });
+    stateListEl.appendChild(item);
+  });
+}
+
+// Search
+searchEl.addEventListener('input', () => {
+  const q = searchEl.value.toLowerCase().trim();
+  document.querySelectorAll('.state-item').forEach(el => {
+    const name = el.dataset.state.toLowerCase();
+    el.style.display = (!q || name.includes(q)) ? '' : 'none';
+  });
+});
+
+// Load all
+document.getElementById('btn-load-all').addEventListener('click', async function() {
+  this.textContent = 'Loading…';
+  this.classList.add('active-btn');
+  const unloaded = manifest.states.filter(s => !loadedStates.has(s.state));
+  for (let i = 0; i < unloaded.length; i++) {
+    await loadState(unloaded[i].state, false);
+    this.textContent = `${i + 1} / ${unloaded.length}`;
+  }
+  this.textContent = 'All Loaded ✓';
+  updateDeck();
+  // Zoom to full US
+  deckgl.setProps({
+    initialViewState: {
+      longitude: -98.5,
+      latitude: 39.8,
+      zoom: 4,
+      pitch: 0,
+      bearing: 0,
+      transitionDuration: 1500,
+      transitionInterpolator: new deck.FlyToInterpolator()
+    }
+  });
+});
+
+// Reset
+document.getElementById('btn-reset').addEventListener('click', () => {
+  deckgl.setProps({
+    initialViewState: {
+      longitude: -98.5,
+      latitude: 39.8,
+      zoom: 4,
+      pitch: 0,
+      bearing: 0,
+      transitionDuration: 1200,
+      transitionInterpolator: new deck.FlyToInterpolator()
+    }
+  });
+});
+
+// Sidebar toggle
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+sidebarToggle.addEventListener('click', () => {
+  sidebar.classList.toggle('collapsed');
+  sidebarToggle.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
+  // Resize deck
+  setTimeout(() => deckgl && deckgl.redraw(true), 400);
+});
+
+// =============================================
+// Start
+// =============================================
+init();
+</script>
+</body>
+</html>
