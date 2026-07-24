@@ -1,0 +1,617 @@
+{
+  "totalMarkers": 206284,
+  "states": [
+    {
+      "state": "Alabama",
+      "file": "data/alabama.json",
+      "count": 4459,
+      "size": 1609357,
+      "bounds": {
+        "minLat": 30.227579,
+        "maxLat": 34.991812,
+        "minLng": -88.415368,
+        "maxLng": -84.951133
+      }
+    },
+    {
+      "state": "Alaska",
+      "file": "data/alaska.json",
+      "count": 748,
+      "size": 271171,
+      "bounds": {
+        "minLat": 53.875637,
+        "maxLat": 67.251208,
+        "minLng": -166.536556,
+        "maxLng": -131.639379
+      }
+    },
+    {
+      "state": "Arizona",
+      "file": "data/arizona.json",
+      "count": 1796,
+      "size": 623808,
+      "bounds": {
+        "minLat": 31.333904,
+        "maxLat": 37.0002,
+        "minLng": -114.734458,
+        "maxLng": -109.045319
+      }
+    },
+    {
+      "state": "Arkansas",
+      "file": "data/arkansas.json",
+      "count": 2040,
+      "size": 718981,
+      "bounds": {
+        "minLat": 33.014586,
+        "maxLat": 36.498787,
+        "minLng": -94.602073,
+        "maxLng": -89.90483
+      }
+    },
+    {
+      "state": "California",
+      "file": "data/california.json",
+      "count": 10256,
+      "size": 3648051,
+      "bounds": {
+        "minLat": 32.53455,
+        "maxLat": 41.995812,
+        "minLng": -124.349523,
+        "maxLng": -114.303748
+      }
+    },
+    {
+      "state": "Colorado",
+      "file": "data/colorado.json",
+      "count": 2480,
+      "size": 874276,
+      "bounds": {
+        "minLat": 36.99387,
+        "maxLat": 41.002347,
+        "minLng": -109.050023,
+        "maxLng": -102.046509
+      }
+    },
+    {
+      "state": "Connecticut",
+      "file": "data/connecticut.json",
+      "count": 2740,
+      "size": 945559,
+      "bounds": {
+        "minLat": 41.00146,
+        "maxLat": 42.044865,
+        "minLng": -73.673308,
+        "maxLng": -71.806798
+      }
+    },
+    {
+      "state": "Delaware",
+      "file": "data/delaware.json",
+      "count": 1261,
+      "size": 432761,
+      "bounds": {
+        "minLat": 38.451311,
+        "maxLat": 39.834644,
+        "minLng": -75.786556,
+        "maxLng": -75.052576
+      }
+    },
+    {
+      "state": "District Of Columbia",
+      "file": "data/district_of_columbia.json",
+      "count": 434,
+      "size": 148452,
+      "bounds": {
+        "minLat": 38.889822,
+        "maxLat": 38.969035,
+        "minLng": -77.094654,
+        "maxLng": -76.909398
+      }
+    },
+    {
+      "state": "Florida",
+      "file": "data/florida.json",
+      "count": 7532,
+      "size": 2683581,
+      "bounds": {
+        "minLat": 24.546507,
+        "maxLat": 30.988432,
+        "minLng": -87.518225,
+        "maxLng": -80.033133
+      }
+    },
+    {
+      "state": "Georgia",
+      "file": "data/georgia.json",
+      "count": 6920,
+      "size": 2431622,
+      "bounds": {
+        "minLat": 30.5182,
+        "maxLat": 34.9875,
+        "minLng": -85.543472,
+        "maxLng": -80.8903
+      }
+    },
+    {
+      "state": "Hawaii",
+      "file": "data/hawaii.json",
+      "count": 382,
+      "size": 138126,
+      "bounds": {
+        "minLat": 18.920867,
+        "maxLat": 22.231545,
+        "minLng": -159.669379,
+        "maxLng": -155.0675
+      }
+    },
+    {
+      "state": "Idaho",
+      "file": "data/idaho.json",
+      "count": 1215,
+      "size": 437117,
+      "bounds": {
+        "minLat": 41.992601,
+        "maxLat": 48.727184,
+        "minLng": -117.033899,
+        "maxLng": -111.0665
+      }
+    },
+    {
+      "state": "Illinois",
+      "file": "data/illinois.json",
+      "count": 4897,
+      "size": 1671694,
+      "bounds": {
+        "minLat": 36.983962,
+        "maxLat": 42.49702,
+        "minLng": -91.436297,
+        "maxLng": -87.524506
+      }
+    },
+    {
+      "state": "Indiana",
+      "file": "data/indiana.json",
+      "count": 4399,
+      "size": 1524273,
+      "bounds": {
+        "minLat": 37.878816,
+        "maxLat": 41.753998,
+        "minLng": -87.939067,
+        "maxLng": -84.808215
+      }
+    },
+    {
+      "state": "Iowa",
+      "file": "data/iowa.json",
+      "count": 1387,
+      "size": 465042,
+      "bounds": {
+        "minLat": 40.390517,
+        "maxLat": 43.499555,
+        "minLng": -96.566386,
+        "maxLng": -90.183636
+      }
+    },
+    {
+      "state": "Kansas",
+      "file": "data/kansas.json",
+      "count": 2752,
+      "size": 919577,
+      "bounds": {
+        "minLat": 36.99894,
+        "maxLat": 40.001963,
+        "minLng": -102.037331,
+        "maxLng": -94.610578
+      }
+    },
+    {
+      "state": "Kentucky",
+      "file": "data/kentucky.json",
+      "count": 4350,
+      "size": 1578804,
+      "bounds": {
+        "minLat": 36.498994,
+        "maxLat": 39.103369,
+        "minLng": -89.339114,
+        "maxLng": -82.165278
+      }
+    },
+    {
+      "state": "Louisiana",
+      "file": "data/louisiana.json",
+      "count": 3477,
+      "size": 1228714,
+      "bounds": {
+        "minLat": 29.190398,
+        "maxLat": 33.003918,
+        "minLng": -93.996373,
+        "maxLng": -89.456811
+      }
+    },
+    {
+      "state": "Maine",
+      "file": "data/maine.json",
+      "count": 1202,
+      "size": 427876,
+      "bounds": {
+        "minLat": 43.068061,
+        "maxLat": 47.459535,
+        "minLng": -71.004102,
+        "maxLng": -66.950576
+      }
+    },
+    {
+      "state": "Maryland",
+      "file": "data/maryland.json",
+      "count": 5926,
+      "size": 2104600,
+      "bounds": {
+        "minLat": 37.970711,
+        "maxLat": 39.72225,
+        "minLng": -79.485367,
+        "maxLng": -75.0524
+      }
+    },
+    {
+      "state": "Massachusetts",
+      "file": "data/massachusetts.json",
+      "count": 3425,
+      "size": 1156327,
+      "bounds": {
+        "minLat": 41.280518,
+        "maxLat": 42.879509,
+        "minLng": -73.438258,
+        "maxLng": -69.936431
+      }
+    },
+    {
+      "state": "Michigan",
+      "file": "data/michigan.json",
+      "count": 5710,
+      "size": 2036192,
+      "bounds": {
+        "minLat": 41.696518,
+        "maxLat": 47.468009,
+        "minLng": -90.17066,
+        "maxLng": -82.420386
+      }
+    },
+    {
+      "state": "Minnesota",
+      "file": "data/minnesota.json",
+      "count": 2739,
+      "size": 973093,
+      "bounds": {
+        "minLat": 43.500447,
+        "maxLat": 49.352961,
+        "minLng": -97.027801,
+        "maxLng": -89.588523
+      }
+    },
+    {
+      "state": "Mississippi",
+      "file": "data/mississippi.json",
+      "count": 3160,
+      "size": 1124275,
+      "bounds": {
+        "minLat": 30.263432,
+        "maxLat": 34.992148,
+        "minLng": -91.515604,
+        "maxLng": -88.113107
+      }
+    },
+    {
+      "state": "Missouri",
+      "file": "data/missouri.json",
+      "count": 4304,
+      "size": 1488720,
+      "bounds": {
+        "minLat": 36.039739,
+        "maxLat": 40.586463,
+        "minLng": -95.648182,
+        "maxLng": -89.123814
+      }
+    },
+    {
+      "state": "Montana",
+      "file": "data/montana.json",
+      "count": 2268,
+      "size": 827123,
+      "bounds": {
+        "minLat": 44.6311,
+        "maxLat": 48.866178,
+        "minLng": -115.769828,
+        "maxLng": -104.039703
+      }
+    },
+    {
+      "state": "Nebraska",
+      "file": "data/nebraska.json",
+      "count": 1313,
+      "size": 462711,
+      "bounds": {
+        "minLat": 40.000053,
+        "maxLat": 42.958679,
+        "minLng": -104.046192,
+        "maxLng": -95.331208
+      }
+    },
+    {
+      "state": "Nevada",
+      "file": "data/nevada.json",
+      "count": 1093,
+      "size": 392067,
+      "bounds": {
+        "minLat": 35.015743,
+        "maxLat": 41.972442,
+        "minLng": -120.002033,
+        "maxLng": -114.043582
+      }
+    },
+    {
+      "state": "New Hampshire",
+      "file": "data/new_hampshire.json",
+      "count": 943,
+      "size": 327461,
+      "bounds": {
+        "minLat": 42.739483,
+        "maxLat": 45.239158,
+        "minLng": -72.522365,
+        "maxLng": -70.709315
+      }
+    },
+    {
+      "state": "New Jersey",
+      "file": "data/new_jersey.json",
+      "count": 4820,
+      "size": 1631302,
+      "bounds": {
+        "minLat": 38.93149,
+        "maxLat": 41.321074,
+        "minLng": -75.556127,
+        "maxLng": -73.918698
+      }
+    },
+    {
+      "state": "New Mexico",
+      "file": "data/new_mexico.json",
+      "count": 1532,
+      "size": 543972,
+      "bounds": {
+        "minLat": 31.510467,
+        "maxLat": 36.998958,
+        "minLng": -109.04681,
+        "maxLng": -103.062905
+      }
+    },
+    {
+      "state": "New York",
+      "file": "data/new_york.json",
+      "count": 14726,
+      "size": 4756181,
+      "bounds": {
+        "minLat": 40.502846,
+        "maxLat": 45.534411,
+        "minLng": -79.744444,
+        "maxLng": -71.8566
+      }
+    },
+    {
+      "state": "North Carolina",
+      "file": "data/north_carolina.json",
+      "count": 6159,
+      "size": 2039204,
+      "bounds": {
+        "minLat": 33.845402,
+        "maxLat": 36.578848,
+        "minLng": -84.234781,
+        "maxLng": -75.465767
+      }
+    },
+    {
+      "state": "North Dakota",
+      "file": "data/north_dakota.json",
+      "count": 790,
+      "size": 277834,
+      "bounds": {
+        "minLat": 45.945504,
+        "maxLat": 48.988821,
+        "minLng": -104.044328,
+        "maxLng": -96.598747
+      }
+    },
+    {
+      "state": "Ohio",
+      "file": "data/ohio.json",
+      "count": 11481,
+      "size": 3848360,
+      "bounds": {
+        "minLat": 38.40649,
+        "maxLat": 41.970833,
+        "minLng": -84.818249,
+        "maxLng": -80.519003
+      }
+    },
+    {
+      "state": "Oklahoma",
+      "file": "data/oklahoma.json",
+      "count": 2042,
+      "size": 723415,
+      "bounds": {
+        "minLat": 33.736017,
+        "maxLat": 36.998358,
+        "minLng": -102.997851,
+        "maxLng": -94.491259
+      }
+    },
+    {
+      "state": "Oregon",
+      "file": "data/oregon.json",
+      "count": 1350,
+      "size": 476751,
+      "bounds": {
+        "minLat": 41.993274,
+        "maxLat": 46.207,
+        "minLng": -124.557529,
+        "maxLng": -116.656
+      }
+    },
+    {
+      "state": "Pennsylvania",
+      "file": "data/pennsylvania.json",
+      "count": 12412,
+      "size": 4185003,
+      "bounds": {
+        "minLat": 39.720012,
+        "maxLat": 42.248753,
+        "minLng": -80.518914,
+        "maxLng": -74.694708
+      }
+    },
+    {
+      "state": "Rhode Island",
+      "file": "data/rhode_island.json",
+      "count": 830,
+      "size": 280287,
+      "bounds": {
+        "minLat": 41.1542,
+        "maxLat": 42.012375,
+        "minLng": -71.858162,
+        "maxLng": -71.127937
+      }
+    },
+    {
+      "state": "South Carolina",
+      "file": "data/south_carolina.json",
+      "count": 4965,
+      "size": 1782219,
+      "bounds": {
+        "minLat": 32.09184,
+        "maxLat": 35.190262,
+        "minLng": -83.193611,
+        "maxLng": -78.594786
+      }
+    },
+    {
+      "state": "South Dakota",
+      "file": "data/south_dakota.json",
+      "count": 1830,
+      "size": 647965,
+      "bounds": {
+        "minLat": 42.525678,
+        "maxLat": 45.941317,
+        "minLng": -104.034176,
+        "maxLng": -96.453514
+      }
+    },
+    {
+      "state": "Tennessee",
+      "file": "data/tennessee.json",
+      "count": 6981,
+      "size": 2489936,
+      "bounds": {
+        "minLat": 34.985717,
+        "maxLat": 36.640633,
+        "minLng": -90.130886,
+        "maxLng": -81.741125
+      }
+    },
+    {
+      "state": "Texas",
+      "file": "data/texas.json",
+      "count": 16776,
+      "size": 6156963,
+      "bounds": {
+        "minLat": 25.852364,
+        "maxLat": 36.478207,
+        "minLng": -106.603093,
+        "maxLng": -93.524766
+      }
+    },
+    {
+      "state": "Utah",
+      "file": "data/utah.json",
+      "count": 2706,
+      "size": 985385,
+      "bounds": {
+        "minLat": 36.999163,
+        "maxLat": 42.001473,
+        "minLng": -114.03771,
+        "maxLng": -109.045334
+      }
+    },
+    {
+      "state": "Vermont",
+      "file": "data/vermont.json",
+      "count": 1104,
+      "size": 380280,
+      "bounds": {
+        "minLat": 42.726949,
+        "maxLat": 45.013639,
+        "minLng": -73.419767,
+        "maxLng": -71.46646
+      }
+    },
+    {
+      "state": "Virginia",
+      "file": "data/virginia.json",
+      "count": 10099,
+      "size": 3617629,
+      "bounds": {
+        "minLat": 36.541934,
+        "maxLat": 39.316463,
+        "minLng": -83.670659,
+        "maxLng": -75.33895
+      }
+    },
+    {
+      "state": "Washington",
+      "file": "data/washington.json",
+      "count": 1348,
+      "size": 472439,
+      "bounds": {
+        "minLat": 45.5858,
+        "maxLat": 49.002042,
+        "minLng": -124.545445,
+        "maxLng": -117.039711
+      }
+    },
+    {
+      "state": "West Virginia",
+      "file": "data/west_virginia.json",
+      "count": 3931,
+      "size": 1364508,
+      "bounds": {
+        "minLat": 37.24311,
+        "maxLat": 40.618363,
+        "minLng": -82.598313,
+        "maxLng": -77.719131
+      }
+    },
+    {
+      "state": "Wisconsin",
+      "file": "data/wisconsin.json",
+      "count": 3352,
+      "size": 1187861,
+      "bounds": {
+        "minLat": 42.49364,
+        "maxLat": 46.946759,
+        "minLng": -92.802959,
+        "maxLng": -86.82818
+      }
+    },
+    {
+      "state": "Wyoming",
+      "file": "data/wyoming.json",
+      "count": 1442,
+      "size": 508854,
+      "bounds": {
+        "minLat": 40.998,
+        "maxLat": 45.002048,
+        "minLng": -111.047318,
+        "maxLng": -104.053103
+      }
+    }
+  ]
+}
